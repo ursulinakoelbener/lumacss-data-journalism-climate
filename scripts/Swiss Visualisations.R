@@ -27,6 +27,12 @@ protest_type_plot <- plot_ly(data=theme_df,
                                 yaxis = list(title = ""),
                                 xaxis = list(title = "Number of Protests"))
 
+# save as html
+htmlwidgets::saveWidget(
+  protest_type_plot,
+  file = "plot/distribution_of_protest_by_topics.html"
+  )
+
 regional_df <- swiss_data %>% 
   group_by(admin1,Topic) %>% 
   summarise(Protests=n()) %>% 
@@ -47,6 +53,11 @@ regional_plot <- plot_ly(data=regional_df,
          yaxis = list(title = ""),
          xaxis = list(title = "Percentage of Canton Protests (%)"))
 
+# save as html
+htmlwidgets::saveWidget(
+  regional_plot,
+  file = "plot/distribution_of_topics_by_canton.html"
+)
 
 # 3. Identify which cantons and topics have highest number of prot --------
 
@@ -71,6 +82,13 @@ protester_plot <- plot_ly(data=cantons_protesters,
          yaxis = list(title = ""),
          xaxis = list(title = "Number of protesters"))
 
+# save as html
+htmlwidgets::saveWidget(
+  regional_plot,
+  file = "plot/number_of_protest_by_topic_and_canton.html"
+)
+
+
 # 4. Investigate distribution of protests over time -----------------------
 
 protests_time <- swiss_data%>% 
@@ -87,3 +105,9 @@ protest_time_plot <- plot_ly(data=protests_time,
   layout(title = "Distribution of Protests (2020-2025)",
          xaxis = list(title = "Date"),
          yaxis = list(title = "Number of Protests"))
+
+# save as html
+htmlwidgets::saveWidget(
+  protest_time_plot,
+  file = "plot/distribution_of_protests.html"
+)
