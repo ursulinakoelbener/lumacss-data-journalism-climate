@@ -1,7 +1,7 @@
 library(tidyverse)
 library(plotly)
 
-swiss_data <- read_csv("Enriched Swiss protest data.csv")
+swiss_data <- read_csv("data/Enriched Swiss protest data.csv")
 
 # 1. Cantons with the most protests ---------------------------------------
 
