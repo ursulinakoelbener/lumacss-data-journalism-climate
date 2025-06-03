@@ -41,7 +41,7 @@ climate_sf <- st_as_sf(
 
 ## 2c. create gif ----
 # basic plot
-p <- ggplot() +
+p_climate <- ggplot() +
   geom_sf(data = kantone, fill = "white", color = "black") +
   geom_sf(data = climate_sf, aes(color = "red", size = 2)) +
   scale_size(range = c(4, 14)) +
@@ -49,13 +49,13 @@ p <- ggplot() +
   theme_minimal()
 
 #  Animation definieren
-animation <- p +
+animation_climate <- p_climate +
   transition_time(climate_sf$event_month) +
   shadow_mark(past = TRUE, future = FALSE, alpha = 1) +
   ease_aes("linear")
 
 # GIF exportieren
-animate(animation,
+animate(animation_climate,
         width = 900, height = 650,
         duration = 10, fps = 6,
         renderer = gifski_renderer("plot/climate_protests.gif"))
@@ -157,7 +157,7 @@ migrants_sf <- st_as_sf(
 p_migrants <- ggplot() +
   geom_sf(data = kantone, fill = "white", color = "black") +
   geom_sf(data = migrants_sf, aes(color = "red", size = 1)) +
-  labs(title = "Frauenstreiks in der Schweiz: {format(frame_time, '%B %Y')}") +
+  labs(title = "Protest Migrants: {format(frame_time, '%B %Y')}") +
   theme_minimal()
 
 #  Animation definieren
