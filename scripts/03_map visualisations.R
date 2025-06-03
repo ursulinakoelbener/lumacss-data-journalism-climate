@@ -80,20 +80,20 @@ workers_sf <- st_as_sf(
 
 ## 3c. create gif ----
 # basic plot
-p <- ggplot() +
+p_workers <- ggplot() +
   geom_sf(data = kantone, fill = "white", color = "black") +
   geom_sf(data = workers_sf, aes(color = "red", size = 1)) +
   labs(title = "Proteste von Arbeitnehmenden in der Schweiz: {format(frame_time, '%B %Y')}") +
   theme_minimal()
 
 #  Animation definieren
-animation <- p +
+animation_workers <- p_workers +
   transition_time(workers_sf$event_month) +
   shadow_mark(past = TRUE, future = FALSE, alpha = 1) +
   ease_aes("linear")
 
 # GIF exportieren
-animate(animation,
+animate(animation_workers,
         width = 900, height = 650,
         duration = 10, fps = 6,
         renderer = gifski_renderer("plot/workers_protests.gif"))
@@ -117,20 +117,57 @@ feminist_sf <- st_as_sf(
 
 ## 4c. create gif ----
 # basic plot
-p <- ggplot() +
+p_feminist <- ggplot() +
   geom_sf(data = kantone, fill = "white", color = "black") +
   geom_sf(data = feminist_sf, aes(color = "red", size = 1)) +
   labs(title = "Frauenstreiks in der Schweiz: {format(frame_time, '%B %Y')}") +
   theme_minimal()
 
 #  Animation definieren
-animation <- p +
+animation_feminist <- p_feminist +
   transition_time(feminist_sf$event_month) +
   shadow_mark(past = TRUE, future = FALSE, alpha = 1) +
   ease_aes("linear")
 
 # GIF exportieren
-animate(animation,
+animate(animation_feminist,
         width = 900, height = 650,
         duration = 10, fps = 6,
         renderer = gifski_renderer("plot/feminist_protests.gif"))
+
+# 5. Migrants GIF ----
+
+## 5a. filter data ----
+migrants_data <- swiss_data %>%
+  filter(Topic == "Migrants")  %>%
+  mutate(
+    event_date = as.Date(event_date),
+    event_month = floor_date(event_date, "month")  # z.B. 2025-05-01
+  )
+
+## 5b. create sf-object ----
+migrants_sf <- st_as_sf(
+  migrants_data,
+  coords = c("longitude", "latitude"),
+  crs = 4326
+)
+
+## 5c. create gif ----
+# basic plot
+p_migrants <- ggplot() +
+  geom_sf(data = kantone, fill = "white", color = "black") +
+  geom_sf(data = migrants_sf, aes(color = "red", size = 1)) +
+  labs(title = "Frauenstreiks in der Schweiz: {format(frame_time, '%B %Y')}") +
+  theme_minimal()
+
+#  Animation definieren
+animation_migrants <- p_migrants +
+  transition_time(migrants_sf$event_month) +
+  shadow_mark(past = TRUE, future = FALSE, alpha = 1) +
+  ease_aes("linear")
+
+# GIF exportieren
+animate(animation_migrants,
+        width = 900, height = 650,
+        duration = 10, fps = 6,
+        renderer = gifski_renderer("plot/migrants_protests.gif"))
