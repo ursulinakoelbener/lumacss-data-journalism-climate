@@ -17,6 +17,11 @@ world <- ne_countries(scale = "medium", returnclass = "sf")
 
 switzerland <- world %>% filter(admin == "Switzerland")
 
+# better map with cantons
+kantone_url <- "https://labs.karavia.ch/swiss-boundaries-geojson/geojson/2020/swissBOUNDARIES3D_1_3_TLM_KANTONSGEBIET.geojson"
+
+kantone <- st_read(kantone_url)
+
 # 2. filter data ----
 climate_data <- swiss_data %>%
   filter(Topic == "Climate")  %>%
@@ -35,8 +40,8 @@ climate_sf <- st_as_sf(
 # 4. create gif ----
 # basic plot
 p <- ggplot() +
-  geom_sf(data = switzerland, fill = "white", color = "black") +
-  geom_sf(data = climate_sf, aes(color = "red", size = final_estimate)) +
+  geom_sf(data = kantone, fill = "white", color = "black") +
+  geom_sf(data = climate_sf, aes(color = "red", size = 2)) +
   scale_size(range = c(4, 14)) +
   labs(title = "Klimaproteste in der Schweiz: {format(frame_time, '%B %Y')}") +
   theme_minimal()
@@ -44,10 +49,11 @@ p <- ggplot() +
 #  Animation definieren
 animation <- p +
   transition_time(climate_sf$event_month) +
+  shadow_mark(past = TRUE, future = FALSE, alpha = 1) +
   ease_aes("linear")
 
 # GIF exportieren
 animate(animation,
-        width = 700, height = 700,
-        duration = 20, fps = 5,
+        width = 900, height = 650,
+        duration = 10, fps = 6,
         renderer = gifski_renderer("plot/climate_protests.gif"))
