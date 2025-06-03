@@ -22,7 +22,9 @@ kantone_url <- "https://labs.karavia.ch/swiss-boundaries-geojson/geojson/2020/sw
 
 kantone <- st_read(kantone_url)
 
-# 2. filter data ----
+# 2. Climate GIF ----
+
+## 2a. filter data ----
 climate_data <- swiss_data %>%
   filter(Topic == "Climate")  %>%
   mutate(
@@ -30,14 +32,14 @@ climate_data <- swiss_data %>%
     event_month = floor_date(event_date, "month")  # z.B. 2025-05-01
   )
 
-# 3. create sf-object ----
+## 2b. create sf-object ----
 climate_sf <- st_as_sf(
   climate_data,
   coords = c("longitude", "latitude"),
   crs = 4326
 )
 
-# 4. create gif ----
+## 2c. create gif ----
 # basic plot
 p <- ggplot() +
   geom_sf(data = kantone, fill = "white", color = "black") +
@@ -57,3 +59,42 @@ animate(animation,
         width = 900, height = 650,
         duration = 10, fps = 6,
         renderer = gifski_renderer("plot/climate_protests.gif"))
+
+
+# 3. Workers GIF ----
+
+## 3a. filter data ----
+workers_data <- swiss_data %>%
+  filter(Topic == "Workers")  %>%
+  mutate(
+    event_date = as.Date(event_date),
+    event_month = floor_date(event_date, "month")  # z.B. 2025-05-01
+  )
+
+## 3b. create sf-object ----
+workers_sf <- st_as_sf(
+  workers_data,
+  coords = c("longitude", "latitude"),
+  crs = 4326
+)
+
+## 3c. create gif ----
+# basic plot
+p <- ggplot() +
+  geom_sf(data = kantone, fill = "white", color = "black") +
+  geom_sf(data = workers_sf, aes(color = "red", size = 1)) +
+  scale_size(range = c(4, 14)) +
+  labs(title = "Proteste von Arbeitnehmenden in der Schweiz: {format(frame_time, '%B %Y')}") +
+  theme_minimal()
+
+#  Animation definieren
+animation <- p +
+  transition_time(workers_sf$event_month) +
+  shadow_mark(past = TRUE, future = FALSE, alpha = 1) +
+  ease_aes("linear")
+
+# GIF exportieren
+animate(animation,
+        width = 900, height = 650,
+        duration = 10, fps = 6,
+        renderer = gifski_renderer("plot/workers_protests.gif"))
