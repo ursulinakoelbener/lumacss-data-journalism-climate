@@ -43,7 +43,7 @@ climate_sf <- st_as_sf(
 # basic plot
 p_climate <- ggplot() +
   geom_sf(data = kantone, fill = "white", color = "black") +
-  geom_sf(data = climate_sf, aes(color = "red", size = 2)) +
+  geom_sf(data = climate_sf, aes(color = "red", size = 3)) +
   scale_size(range = c(4, 14)) +
   labs(title = "Klimaproteste in der Schweiz: {format(frame_time, '%B %Y')}") +
   theme_minimal()
@@ -82,7 +82,8 @@ workers_sf <- st_as_sf(
 # basic plot
 p_workers <- ggplot() +
   geom_sf(data = kantone, fill = "white", color = "black") +
-  geom_sf(data = workers_sf, aes(color = "red", size = 1)) +
+  geom_sf(data = workers_sf, aes(color = "red", size = 3)) +
+  scale_size(range = c(4, 14)) +
   labs(title = "Proteste von Arbeitnehmenden in der Schweiz: {format(frame_time, '%B %Y')}") +
   theme_minimal()
 
@@ -119,7 +120,8 @@ feminist_sf <- st_as_sf(
 # basic plot
 p_feminist <- ggplot() +
   geom_sf(data = kantone, fill = "white", color = "black") +
-  geom_sf(data = feminist_sf, aes(color = "red", size = 1)) +
+  geom_sf(data = feminist_sf, aes(color = "red", size = 3)) +
+  scale_size(range = c(4, 14)) +
   labs(title = "Frauenstreiks in der Schweiz: {format(frame_time, '%B %Y')}") +
   theme_minimal()
 
@@ -156,7 +158,8 @@ migrants_sf <- st_as_sf(
 # basic plot
 p_migrants <- ggplot() +
   geom_sf(data = kantone, fill = "white", color = "black") +
-  geom_sf(data = migrants_sf, aes(color = "red", size = 1)) +
+  geom_sf(data = migrants_sf, aes(color = "red", size = 3)) +
+  scale_size(range = c(4, 14)) +
   labs(title = "Protest Migrants: {format(frame_time, '%B %Y')}") +
   theme_minimal()
 
